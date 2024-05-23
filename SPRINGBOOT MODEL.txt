@@ -1,0 +1,900 @@
+ACCOUNT
+
+package com.onlinebanking.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Account {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="Id")
+	private int id;
+	
+	private String cardNo;
+	
+	private int pin;
+	
+	private int customerId;
+	
+	private String date;
+	
+	private double balance;
+	
+	private String type;
+	
+	private String status;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getCardNo() {
+		return cardNo;
+	}
+
+	public void setCardNo(String cardNo) {
+		this.cardNo = cardNo;
+	}
+
+	public int getPin() {
+		return pin;
+	}
+
+	public void setPin(int pin) {
+		this.pin = pin;
+	}
+
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+}
+
+
+ACCOUNT TRANSACTION
+
+package com.onlinebanking.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class AccountTransaction {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="Id")
+	private int id;
+	
+	private int accountId;
+	
+	private int toAccountId;
+	
+	private String type;
+	
+	private double amount;
+	
+	private String date;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(int accountId) {
+		this.accountId = accountId;
+	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public int getToAccountId() {
+		return toAccountId;
+	}
+
+	public void setToAccountId(int toAccountId) {
+		this.toAccountId = toAccountId;
+	}
+
+}
+
+
+ADMIN
+
+package com.onlinebanking.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Admin {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="Id")
+	private int id;
+	
+	private String userId;
+	
+	private String password;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	
+
+}
+
+APPLY INSURANCE
+
+package com.onlinebanking.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class ApplyInsurance {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="Id")
+	private int id;
+	
+	private int customerId;
+	
+	private String appliedDate;
+	
+	private String approvalStatus;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+
+	public String getAppliedDate() {
+		return appliedDate;
+	}
+
+	public void setAppliedDate(String appliedDate) {
+		this.appliedDate = appliedDate;
+	}
+
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+
+}
+
+
+APPLY LOAN
+
+package com.onlinebanking.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class ApplyLoan {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="Id")
+	private int id;
+	
+	private int customerId;
+	
+	private String appliedDate;
+	
+	private String approvalStatus;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+
+	public String getAppliedDate() {
+		return appliedDate;
+	}
+
+	public void setAppliedDate(String appliedDate) {
+		this.appliedDate = appliedDate;
+	}
+
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+
+}
+
+
+BRANCH
+
+package com.onlinebanking.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Branch {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="Id")
+	private int id;
+	
+	private String name;
+	
+	private String state;
+	
+	private String city;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+	
+	
+
+}
+
+
+CHECKBOOK
+
+package com.onlinebanking.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Checkbook {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="Id")
+	private int id;
+	
+	private int customerId;
+	
+	private String appliedDate;
+	
+	private String approvalStatus;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+
+	public String getAppliedDate() {
+		return appliedDate;
+	}
+
+	public void setAppliedDate(String appliedDate) {
+		this.appliedDate = appliedDate;
+	}
+
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+
+}
+
+
+CUSTOMER 
+
+package com.onlinebanking.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Customer {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="Id")
+	private int id;
+	
+	private int branchId; 
+	
+	private String password;
+	
+    private String firstName;
+	
+	private String lastName;
+	
+	private String dob;
+	
+	private String gender;
+	
+	private String presentAddress;
+	
+	private String permentAddress;
+	
+	private String phoneNumber;
+	
+	private String emailId;
+	
+	private String date;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getBranchId() {
+		return branchId;
+	}
+
+	public void setBranchId(int branchId) {
+		this.branchId = branchId;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getDob() {
+		return dob;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getPresentAddress() {
+		return presentAddress;
+	}
+
+	public void setPresentAddress(String presentAddress) {
+		this.presentAddress = presentAddress;
+	}
+
+	public String getPermentAddress() {
+		return permentAddress;
+	}
+
+	public void setPermentAddress(String permentAddress) {
+		this.permentAddress = permentAddress;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getEmailId() {
+		return emailId;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+	
+}
+
+INSURANCE
+
+package com.onlinebanking.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Insurance {
+	
+	@Id
+	private int id;
+	
+//	private int branchId; 
+	
+	private String password;
+	
+    private String firstName;
+	
+	private String lastName;
+	
+	private String dob;
+	
+	private String gender;
+	
+	private String insurancetype;
+	
+	private String adhaarnumber;
+	
+	private String presentAddress;
+	
+	private String permentAddress;
+	
+	private String phoneNumber;
+	
+	private String emailId;
+	
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+//	public int getBranchId() {
+//		return branchId;
+//	}
+//
+//	public void setBranchId(int branchId) {
+//		this.branchId = branchId;
+//	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getDob() {
+		return dob;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getInsurancetype() {
+		return insurancetype;
+	}
+
+	public void setInsurancetype(String insurancetype) {
+		this.insurancetype = insurancetype;
+	}
+
+	public String getAdhaarnumber() {
+		return adhaarnumber;
+	}
+
+	public void setAdhaarnumber(String adhaarnumber) {
+		this.adhaarnumber = adhaarnumber;
+	}
+
+	public String getPresentAddress() {
+		return presentAddress;
+	}
+
+	public void setPresentAddress(String presentAddress) {
+		this.presentAddress = presentAddress;
+	}
+
+	public String getPermentAddress() {
+		return permentAddress;
+	}
+
+	public void setPermentAddress(String permentAddress) {
+		this.permentAddress = permentAddress;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getEmailId() {
+		return emailId;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+
+
+}
+
+LOAN
+
+package com.onlinebanking.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Loan {
+	
+	@Id
+	private int id;
+	
+//	private int branchId; 
+	
+	private String password;
+	
+    private String firstName;
+	
+	private String lastName;
+	
+	private String dob;
+	
+	private String gender;
+	
+	private String loantype;
+	
+	private String adhaarnumber;
+	
+	private String presentAddress;
+	
+	private String permentAddress;
+	
+	private String phoneNumber;
+	
+	private String emailId;
+	
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+//	public int getBranchId() {
+//		return branchId;
+//	}
+//
+//	public void setBranchId(int branchId) {
+//		this.branchId = branchId;
+//	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getDob() {
+		return dob;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getLoantype() {
+		return loantype;
+	}
+
+	public void setLoantype(String loantype) {
+		this.loantype = loantype;
+	}
+
+	public String getAdhaarnumber() {
+		return adhaarnumber;
+	}
+
+	public void setAdhaarnumber(String adhaarnumber) {
+		this.adhaarnumber = adhaarnumber;
+	}
+
+	public String getPresentAddress() {
+		return presentAddress;
+	}
+
+	public void setPresentAddress(String presentAddress) {
+		this.presentAddress = presentAddress;
+	}
+
+	public String getPermentAddress() {
+		return permentAddress;
+	}
+
+	public void setPermentAddress(String permentAddress) {
+		this.permentAddress = permentAddress;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getEmailId() {
+		return emailId;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+
+
+}
+
