@@ -1,0 +1,679 @@
+ACCOUNT CONTROLLER
+
+package com.onlinebanking.controller;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.onlinebanking.dao.AccountDao;
+import com.onlinebanking.dao.applyloanDao;
+import com.onlinebanking.dao.applyinsuranceDao;
+import com.onlinebanking.dao.CheckbookDao;
+import com.onlinebanking.model.Account;
+import com.onlinebanking.model.ApplyInsurance;
+import com.onlinebanking.model.ApplyLoan;
+import com.onlinebanking.model.Checkbook;
+import com.onlinebanking.model.Customer;
+import com.onlinebanking.utility.Constants.CheckbookStatus;
+import com.onlinebanking.utility.Constants.ApplyLoanStatus;
+import com.onlinebanking.utility.Constants.ApplyInsuranceStatus;
+
+@Controller
+public class AccountController {
+	
+	@Autowired
+	private AccountDao accountDao;
+	
+	@Autowired
+	private CheckbookDao checkbookDao;
+	
+	@Autowired
+	private applyloanDao applyloanDao;
+	
+	@Autowired
+	private applyinsuranceDao applyinsuranceDao;
+	
+	@PostMapping("/addaccount")
+	public ModelAndView registerAdmin(@ModelAttribute Account account) {
+		ModelAndView mv = new ModelAndView();
+		
+		accountDao.save(account);
+		
+		mv.addObject("status", "Account Added Successfully!");
+		mv.setViewName("index");
+		return mv;
+	}
+	
+	@GetMapping("/changepin")
+	public String goToCahnegPinPage() {
+		return "changepin";
+	}
+	
+	@PostMapping("/changepin")
+	public ModelAndView changePin(@RequestParam("currentpin") int currentPin, @RequestParam("newpin") int newPin, HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+		
+		Customer customer = (Customer)session.getAttribute("active-user");
+		Account account = null;
+		Optional<Account> o = accountDao.findById(customer.getId());
+		if(o.isPresent()) {
+			account = o.get();
+		}
+		
+		account.setPin(newPin);
+		accountDao.save(account);
+		
+		mv.addObject("status", "Pin changed Successfully!");
+		mv.setViewName("index");
+		return mv;
+	}
+	
+	@GetMapping("/changeAccountStatus")
+	public ModelAndView changeAccountStatus(@RequestParam("accountId") int accountId, @RequestParam("accountStatus") String accountStatus) {
+		ModelAndView mv = new ModelAndView();
+		
+		Account account = accountDao.findById(accountId).get();
+		account.setStatus(accountStatus);
+		
+		accountDao.save(account);
+		
+		mv.addObject("status", "Account Status Updated!");
+		mv.setViewName("index");
+		return mv;
+	}
+
+	@GetMapping("/requestCheckbook")
+	public ModelAndView requestCheckbook(@RequestParam("customerId") int customerId, HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+	
+		Checkbook checkbook = new Checkbook();
+		checkbook.setCustomerId(customerId);
+		checkbook.setAppliedDate(LocalDate.now().toString());
+		checkbook.setApprovalStatus(CheckbookStatus.APPROVAL_PENDING.value());
+		checkbookDao.save(checkbook);
+		
+		mv.addObject("status", "Successfully Requested for Checkbook!");
+		mv.setViewName("index");
+		return mv;
+	}
+	
+	@GetMapping("/requestLoan")
+	public ModelAndView requestLoan(@RequestParam("customerId") int customerId, HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+	
+		ApplyLoan applyloan = new ApplyLoan();
+		applyloan.setCustomerId(customerId);
+		applyloan.setAppliedDate(LocalDate.now().toString());
+		applyloan.setApprovalStatus(ApplyLoanStatus.APPROVAL_PENDING.value());
+		applyloanDao.save(applyloan);
+		
+		mv.addObject("status", "Successfully Requested for Loan!");
+		mv.setViewName("index");
+		return mv;
+	}
+	
+	@GetMapping("/updateapplyloanStatus")
+	public ModelAndView updateapplyloanStatus(@RequestParam("customerId") int customerId, @RequestParam("status") String status) {
+		ModelAndView mv = new ModelAndView();
+		
+		ApplyLoan applyloan = new ApplyLoan();
+		applyloan = applyloanDao.findByCustomerId(customerId);
+		applyloan.setApprovalStatus(status);
+		applyloanDao.save(applyloan);
+	
+		mv.addObject("status", "Loan Approval Status Updated!");
+		mv.setViewName("index");
+		return mv;
+	}
+	
+	@GetMapping("/requestInsurance")
+	public ModelAndView requestInsurance(@RequestParam("customerId") int customerId, HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+	
+		ApplyInsurance applyinsurance = new ApplyInsurance();
+		applyinsurance.setCustomerId(customerId);
+		applyinsurance.setAppliedDate(LocalDate.now().toString());
+		applyinsurance.setApprovalStatus(ApplyInsuranceStatus.APPROVAL_PENDING.value());
+		applyinsuranceDao.save(applyinsurance);
+		
+		mv.addObject("status", "Successfully Requested for Loan!");
+		mv.setViewName("index");
+		return mv;
+	}
+	
+	@GetMapping("/updateapplyinsuranceStatus")
+	public ModelAndView updateapplyinsuranceStatus(@RequestParam("customerId") int customerId, @RequestParam("status") String status) {
+		ModelAndView mv = new ModelAndView();
+		
+		ApplyInsurance applyinsurance = new ApplyInsurance();
+		applyinsurance = applyinsuranceDao.findByCustomerId(customerId);
+		applyinsurance.setApprovalStatus(status);
+		applyinsuranceDao.save(applyinsurance);
+	
+		mv.addObject("status", "Insurance Approval Status Updated!");
+		mv.setViewName("index");
+		return mv;
+	}
+	
+	@GetMapping("/updateCheckbookStatus")
+	public ModelAndView updateCheckbookStatus(@RequestParam("customerId") int customerId, @RequestParam("status") String status) {
+		ModelAndView mv = new ModelAndView();
+		
+		Checkbook checkbook = new Checkbook();
+		checkbook = checkbookDao.findByCustomerId(customerId);
+		checkbook.setApprovalStatus(status);
+		checkbookDao.save(checkbook);
+	
+		mv.addObject("status", "Checkbook Approval Status Updated!");
+		mv.setViewName("index");
+		return mv;
+	}
+	
+}
+
+ACCOUNT TRANSACTION CONTROLLER
+
+package com.onlinebanking.controller;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.onlinebanking.dao.AccountDao;
+import com.onlinebanking.dao.AccountTransactionDao;
+import com.onlinebanking.model.Account;
+import com.onlinebanking.model.AccountTransaction;
+import com.onlinebanking.model.Customer;
+import com.onlinebanking.utility.Constants.AccountStatus;
+import com.onlinebanking.utility.Constants.TransactionType;
+
+@Controller
+public class AccountTransactionController {
+	
+	@Autowired
+	private AccountTransactionDao accountTransactionDao;
+	
+	@Autowired
+	private AccountDao accountDao;
+	
+	@GetMapping("/withdraw")
+	public String goToWithdraw() {
+		return "withdraw";
+	}
+
+	@GetMapping("/deposit")
+	public String goToDeposit() {
+		return "deposit";
+	}
+	
+	@PostMapping("/withdraw")
+	public ModelAndView withdraw(@RequestParam("amount") double amount, @RequestParam("pin") int pin, HttpSession session) {
+		
+		ModelAndView mv = new ModelAndView();
+		
+		Customer customer = (Customer)session.getAttribute("active-user");
+		Account account = null;
+		Optional<Account> o = accountDao.findById(customer.getId());
+		if(o.isPresent()) {
+			account = o.get();
+		}
+		
+		if(account.getStatus().equals(AccountStatus.LOCK.value())) {
+			mv.addObject("status", "Account is Locked, Please contact Bank Administrator!!!");
+			mv.setViewName("index");
+			return mv;
+		}
+		
+		if(pin != account.getPin()) {
+			mv.addObject("status", "Wrong Pin!");
+			mv.setViewName("index");
+			return mv;
+		}
+		
+		if(account.getBalance() < amount ) {
+			mv.addObject("status", "Insufficient Balance!");
+			mv.setViewName("index");
+			return mv;
+		}
+		
+		else {
+			double balanceAmount = account.getBalance() - amount;
+			account.setBalance(balanceAmount);
+			accountDao.save(account);
+			
+			AccountTransaction transaction = new AccountTransaction();
+			transaction.setAccountId(account.getId());
+			transaction.setAmount(amount);
+			transaction.setDate(LocalDate.now().toString());
+			transaction.setType(TransactionType.WITHDRAW.value());
+			
+			accountTransactionDao.save(transaction);
+			
+			mv.addObject("status", "Amount withdrawn successfully!");
+			mv.setViewName("index");
+			return mv;
+			
+		}
+	}
+	
+	@PostMapping("/deposit")
+	public ModelAndView deposit(@RequestParam("amount") double amount, @RequestParam("pin") int pin, HttpSession session) {
+		
+		ModelAndView mv = new ModelAndView();
+		
+		Customer customer = (Customer)session.getAttribute("active-user");
+		Account account = null;
+		Optional<Account> o = accountDao.findById(customer.getId());
+		if(o.isPresent()) {
+			account = o.get();
+		}
+		
+		if(account.getStatus().equals(AccountStatus.LOCK.value())) {
+			mv.addObject("status", "Account is Locked, Please contact Bank Administrator!!!");
+			mv.setViewName("index");
+			return mv;
+		}
+		
+		if(pin != account.getPin()) {
+			mv.addObject("status", "Wrong Pin!");
+			mv.setViewName("index");
+			return mv;
+		}
+		
+		else {
+			double balanceAmount = account.getBalance() + amount;
+			account.setBalance(balanceAmount);
+			accountDao.save(account);
+			
+			AccountTransaction transaction = new AccountTransaction();
+			transaction.setAccountId(account.getId());
+			transaction.setAmount(amount);
+			transaction.setDate(LocalDate.now().toString());
+			transaction.setType(TransactionType.DEPOSIT.value());
+			
+			accountTransactionDao.save(transaction);
+			
+			mv.addObject("status", "Amount Deposit successfully!");
+			mv.setViewName("index");
+			return mv;
+			
+		}
+	}
+	
+	@PostMapping("/accounttransfer")
+	public ModelAndView accountTransfer(@RequestParam("toCardNo") String toCardNo,@RequestParam("amount") double amount, @RequestParam("pin") int pin, HttpSession session) {
+		
+		ModelAndView mv = new ModelAndView();
+		
+		Customer customer = (Customer)session.getAttribute("active-user");
+		Account account = null;
+		Optional<Account> o = accountDao.findById(customer.getId());
+		if(o.isPresent()) {
+			account = o.get();
+		}
+		
+		if(account.getStatus().equals(AccountStatus.LOCK.value())) {
+			mv.addObject("status", "Account is Locked, Please contact Bank Administrator!!!");
+			mv.setViewName("index");
+			return mv;
+		}
+		
+		if(account.getStatus().equals(AccountStatus.LOCK.value())) {
+			mv.addObject("status", "Account is Locked, Please contact Bank Administrator!!!");
+			mv.setViewName("index");
+			return mv;
+		}
+		
+		Account toAccount = accountDao.findByCardNo(toCardNo);
+		
+		if(toAccount == null) {
+			mv.addObject("status", "Account to transfer is Invalid");
+			mv.setViewName("index");
+			return mv;
+		}
+		
+		if(pin != account.getPin()) {
+			mv.addObject("status", "Wrong Pin!");
+			mv.setViewName("index");
+			return mv;
+		}
+		
+		if(amount < 1) {
+			mv.addObject("status", "Amount should be greater than 0");
+			mv.setViewName("index");
+			return mv;
+		}
+		
+		if(account.getBalance() < amount) {
+			mv.addObject("status", "Insufficient Fund to Transfer!!!");
+			mv.setViewName("index");
+			return mv;
+		}
+		
+		else {
+			
+			
+			double balanceAmount = account.getBalance() - amount;
+			account.setBalance(balanceAmount);
+			accountDao.save(account);
+			
+			double recieverBalanceAmount = toAccount.getBalance() + amount;
+			toAccount.setBalance(recieverBalanceAmount);
+			accountDao.save(toAccount);
+			
+			AccountTransaction transaction = new AccountTransaction();
+			transaction.setAccountId(account.getId());
+			transaction.setAmount(amount);
+			transaction.setDate(LocalDate.now().toString());
+			transaction.setType(TransactionType.ACCOUNT_TRANSFER.value());
+			transaction.setToAccountId(toAccount.getId());
+			
+			accountTransactionDao.save(transaction);
+			
+			mv.addObject("status", "Amount transferred Successfull!!!");
+			mv.setViewName("index");
+			return mv;
+			
+		}
+	}
+	
+	@GetMapping("/accounttransfer")
+	public String goToAccountTransferPage() {
+		return "accounttransfer";
+	}
+	
+}
+
+
+ADMIN CONTROLLER
+
+package com.onlinebanking.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.onlinebanking.dao.AdminDao;
+import com.onlinebanking.model.Admin;
+
+@Controller
+public class AdminController {
+	
+	@Autowired
+	private AdminDao adminDao;
+	
+	@GetMapping("/adminlogin")
+	public String gotToLoginPage() {
+		return "loginadmin";
+	}
+	
+	@GetMapping("/adminregister")
+	public String goToRegisterPage() {
+		return "registeradmin";
+	}
+	
+	@GetMapping("/addaccount")
+	public String goToAddAccount() {
+		return "addaccount";
+	}
+	
+	@GetMapping("/admindashboard")
+	public String goToAdminDashboard() {
+		return "admindashboard";
+	}
+	
+	@PostMapping("/adminregister")
+	public ModelAndView registerAdmin(@ModelAttribute Admin admin) {
+		ModelAndView mv = new ModelAndView();
+		
+		adminDao.save(admin);
+		
+		mv.addObject("status", "Admin Registered Successfully.");
+		mv.setViewName("loginadmin");
+		return mv;
+	}
+	
+	@PostMapping("/adminlogin")
+	public ModelAndView registerLogin(@RequestParam("userId") String userId, @RequestParam("password") String password, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		
+		Admin admin = adminDao.findByUserIdAndPassword(userId, password);
+		
+		if(admin != null) {
+			HttpSession session = request.getSession();
+			session.setAttribute("active-user", admin);
+			session.setAttribute("user-login","admin");
+			mv.addObject("status", "Admin Logged in Successfully.");
+			mv.setViewName("index");
+		}
+		
+		else {
+			mv.addObject("status", "Failed to login admin.");
+			mv.setViewName("registeradmin");
+		}
+		
+		
+		return mv;
+	}
+	
+	@GetMapping("/logout")
+	public ModelAndView logout(HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+		session.invalidate();
+		mv.addObject("status", "Logged out sucessfully!");
+		mv.setViewName("index");
+		return mv;
+	}
+
+}
+
+BRANCH CONTROLLER
+
+package com.onlinebanking.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.onlinebanking.dao.BranchDao;
+import com.onlinebanking.model.Branch;
+
+@Controller
+public class BranchController {
+	
+	@Autowired
+	private BranchDao branchDao;
+	
+	@GetMapping("/addbranch")
+	public String gotToLoginPage() {
+		return "addbranch";
+	}
+	
+	@PostMapping("/addbranch")
+	public ModelAndView addBranch(@ModelAttribute Branch branch) {
+      ModelAndView mv = new ModelAndView();
+		
+		branchDao.save(branch);
+		
+		mv.addObject("status", "Branch Added Successfully.");
+		mv.setViewName("index");
+		return mv;
+	}
+
+}
+
+
+CUSTOMER CONTROLLER
+
+package com.onlinebanking.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.onlinebanking.dao.CustomerDao;
+import com.onlinebanking.dao.InsuranceDao;
+import com.onlinebanking.dao.LoanDao;
+import com.onlinebanking.model.Customer;
+import com.onlinebanking.model.Insurance;
+import com.onlinebanking.model.Loan;
+
+@Controller
+public class CustomerController {
+	
+	@Autowired
+	private CustomerDao customerDao;
+	
+	@Autowired
+	private LoanDao loandao;
+	
+	@Autowired
+	private InsuranceDao insurancedao;
+	
+	@GetMapping("/")
+	public String gotToIndexPage() {
+		return "index";
+	}
+	
+	@GetMapping("/home")
+	public String gotToHomePage() {
+		return "index";
+	}
+	
+	@GetMapping("/index")
+	public String gotToindexPage() {
+		return "index";
+	}
+	
+	@GetMapping("/index1")
+	public String gotToindex1Page() {
+		return "index1";
+	}
+	
+	@GetMapping("/index2")
+	public String gotToindex2Page() {
+		return "index2";
+	}
+	
+	@GetMapping("/index3")
+	public String gotToindex3Page() {
+		return "index3";
+	}
+	
+	@GetMapping("/customerlogin")
+	public String gotToLoginPage() {
+		return "login";
+	}
+	
+	@GetMapping("/customerregister")
+	public String goToRegisterPage() {
+		return "registeruser";
+	}
+	
+	@GetMapping("/userloan")
+	public String goToloanPage() {
+		return "loanuser";
+	}
+	
+	@PostMapping("/loancustomer")
+	public ModelAndView loanCustomer(@ModelAttribute Loan loan) {
+		ModelAndView mv = new ModelAndView();
+		
+		 loandao.save(loan);
+		
+		mv.addObject("status", "Loan Successfully Registered 'Go to my details page to apply for loan' ");
+		mv.setViewName("index");
+		return mv;
+	}
+	
+	@GetMapping("/userinsurance")
+	public String goToinsurancePage() {
+		return "insuranceuser";
+	}
+	
+	@PostMapping("/insurancecustomer")
+	public ModelAndView insuranceCustomer(@ModelAttribute Insurance insurance) {
+		ModelAndView mv = new ModelAndView();
+		
+		 insurancedao.save(insurance);
+		
+		mv.addObject("status", "insurance Successfully Applied");
+		mv.setViewName("index");
+		return mv;
+	}
+	
+	@PostMapping("/registercustomer")
+	public ModelAndView registerCustomer(@ModelAttribute Customer customer) {
+		ModelAndView mv = new ModelAndView();
+		
+		Customer c = customerDao.save(customer);
+		
+		mv.addObject("status", "Customer Successfully Registered, Customer Id is "+c.getId());
+		mv.setViewName("addaccount");
+		return mv;
+	}
+	
+
+	
+	@PostMapping("/logincustomer")
+	public ModelAndView loginCustomer(@RequestParam("emailId") String emailId, @RequestParam("password") String password, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		
+		Customer c = customerDao.findByEmailIdAndPassword(emailId, password);
+		
+		if(c != null) {
+			HttpSession session = request.getSession();
+			session.setAttribute("active-user", c);
+			session.setAttribute("user-login","customer");
+			mv.addObject("status", "Customer Logged in Successfully.");
+			mv.setViewName("index");
+		}
+		
+		else {
+			mv.addObject("status", "Failed to login admin.");
+			mv.setViewName("registeruser");
+		}
+		
+		
+		return mv;
+	}
+	
+}
+
+
+
