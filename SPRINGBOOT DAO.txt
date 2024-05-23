@@ -1,0 +1,186 @@
+ACCOUNT DAO
+
+
+package com.onlinebanking.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.onlinebanking.model.Account;
+
+@Repository
+public interface AccountDao extends JpaRepository<Account, Integer> {
+	
+	Account findByCustomerId(int customerId);
+	Account findByCardNo(String cardNo);
+
+}
+
+
+ACCOUNT TRANSACTION DAO
+
+
+package com.onlinebanking.dao;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import com.onlinebanking.model.AccountTransaction;
+
+@Repository
+public interface AccountTransactionDao extends JpaRepository<AccountTransaction, Integer> {
+	
+	List<AccountTransaction> findByAccountId(int accountId);
+
+	@Query(value = "select a from AccountTransaction a where a.accountId =:accountId and a.date=:date")
+	List<AccountTransaction> findByAccountIdAndDate(@Param("accountId") int accountId, @Param("date") String date);
+	
+}
+
+
+ADMIN DAO
+
+
+package com.onlinebanking.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.onlinebanking.model.Admin;
+
+@Repository
+public interface AdminDao extends JpaRepository<Admin, Integer> {
+	
+	Admin findByUserIdAndPassword(String userId, String password);
+
+}
+
+
+APPLY INSURANCE DAO
+
+
+package com.onlinebanking.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.onlinebanking.model.ApplyInsurance;
+
+@Repository
+public interface applyinsuranceDao extends JpaRepository<ApplyInsurance, Integer> {
+
+	ApplyInsurance  findByCustomerId(int customerId);
+	
+}
+
+
+APPLY LOAN DAO
+
+
+package com.onlinebanking.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.onlinebanking.model.ApplyLoan;
+
+
+@Repository
+public interface applyloanDao extends JpaRepository<ApplyLoan, Integer> {
+
+	ApplyLoan  findByCustomerId(int customerId);
+	
+}
+
+
+BRANCH DAO
+
+
+package com.onlinebanking.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.onlinebanking.model.Branch;
+
+@Repository
+public interface BranchDao extends JpaRepository<Branch, Integer> {
+
+}
+
+
+CHECKBOOK DAO
+
+
+package com.onlinebanking.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.onlinebanking.model.Checkbook;
+
+@Repository
+public interface CheckbookDao extends JpaRepository<Checkbook, Integer> {
+
+	Checkbook findByCustomerId(int customerId);
+	
+}
+
+
+CUSTOMER DAO
+
+
+package com.onlinebanking.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.onlinebanking.model.Customer;
+
+@Repository
+public interface CustomerDao extends JpaRepository<Customer, Integer> {
+	
+	Customer findByEmailIdAndPassword(String emailId, String password);
+	Customer findByEmailId(String emailId);
+
+}
+
+
+INSURANCE DAO
+
+
+package com.onlinebanking.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.onlinebanking.model.Customer;
+import com.onlinebanking.model.Insurance;
+
+@Repository
+public interface InsuranceDao extends JpaRepository<Insurance, Integer> {
+		
+}
+
+
+LOAN DAO
+
+
+package com.onlinebanking.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.onlinebanking.model.Customer;
+import com.onlinebanking.model.Loan;
+
+@Repository
+public interface LoanDao extends JpaRepository<Loan, Integer> {
+	
+
+
+}
